@@ -1,0 +1,93 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static "WebApp/css/bootstrap.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "WebApp/css/result.css" %}" type="text/css">
+    <script src="{% static "WebApp/js/d3.min.js" %}"></script>
+    <script src="{% static "WebApp/js/dimple.v2.1.6.min.js" %}"></script>
+</head>
+
+<body>
+<div id="nav">
+    <div id="logo">
+        <a href="{% url 'index' %}"><img src="{% static "WebApp/img/logo.jpeg" %}" alt="logo"></a>
+    </div>
+    <ul id="navi">
+        <li class="navMenu"><a href="{% url 'honeycell' %}">HoneyCell</a></li>
+        <li class="navMenu"><a href="{% url 'upload' %}">New Task</a></li>
+        <li class="navMenu"><a href="{% url 'preprocess' %}">Preprocessing</a></li>
+        <li class="navMenu"><a href="{% url 'analytics' %}">Analytics</a></li>
+        <li class="navMenu"><a href="{% url 'visualization' %}">Visualization</a></li>
+        <li class="navMenu"><a href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+</div>
+
+<h2 class="log"> Hello {{ user }} </h2>
+
+<br>
+
+<div class="container">
+    <div class="row" align="center">
+
+        <div class="table-responsive">
+            <table class="table table-hover" border="2" style="text-align: left">
+                <thead>
+                <tr>
+                    <th colspan="2"><h2 align="center">This is the detail for <i>{{ book.book_name }}</i></h2></th>
+                </tr>
+                </thead>
+                <tbody>
+                <col width="50%">
+                <col width="50%">
+                <tr>
+                    <td><label>Book id: </label></td>
+                    <td>{{ book.book_id }}</td>
+                </tr>
+                <tr>
+                    <td><label>Book name: </label></td>
+                    <td>{{ book.book_name }}</td>
+                </tr>
+                <tr>
+                    <td><label>Book description: </label></td>
+                    <td>{{ book.book_description }}</td>
+                </tr>
+                <tr>
+                    <td><label>Book file: </label></td>
+                    <td>{{ book.book_file }}</td>
+                </tr>
+                <tr>
+                    <td><label>Book file size: </label></td>
+                    <td>{{ book.book_file.size }}</td>
+                </tr>
+                <tr>
+                    <td><label>Book file url: </label></td>
+                    <td>{{ book.book_file.url }}</td>
+                </tr>
+                </tbody>
+                <tr>
+                    <td><a href="{{ book.book_file.url }}">
+                        <button>Open the book</button>
+                    </a></td>
+                    <td><a href="{% url 'delete_book' book.book_id %}">
+                        <button>Delete the book</button>
+                    </a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<h3>
+    Welcome to HoneyCell WebServer!
+</h3>
+<form method="get" action="{% url 'logout' %}">{% csrf_token %}
+    <p>
+        <button type="submit">Log Out</button>
+    </p>
+</form>
+
+</body>
+</html>
+
