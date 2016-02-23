@@ -286,7 +286,7 @@ def create_new_user_using_forms(request):
     else:
         print("in the POST method")
 
-        form = CreateUserForm(request.POST)
+        form = CreateUserForm(request.POST, request.FILES)
         context['form'] = form
 
         if not form.is_valid():
@@ -298,18 +298,17 @@ def create_new_user_using_forms(request):
         print(request.POST['username'])
         print(request.POST['first_name'])
         print(request.POST['last_name'])
-        print(request.POST['date'])
         print(request.POST['email'])
         print(request.POST['password1'])
         print(request.POST['password2'])
         print("^" * 30)
 
-        new_user_instance = User(username=request.POST['user_name'],
+        new_user_instance = User(username=request.POST['username'],
                                  first_name=request.POST['first_name'],
                                  last_name=request.POST['last_name'],
-                                 date_joined=request.POST['date_joined'],
+                                 date_joined=datetime.datetime.now(),
                                  email=request.POST['email'],
-                                 password=request.POST['password'])
+                                 password=request.POST['password1'])
 
         new_user_instance.save()
         print("new_user_instance already save.")
@@ -329,9 +328,6 @@ def show_users(request):
     context['users'] = users
 
     return render(request, 'WebApp/show_users.html', context)
-
-
-
 
 
 @login_required

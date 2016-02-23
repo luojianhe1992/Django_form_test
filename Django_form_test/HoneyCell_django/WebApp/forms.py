@@ -42,12 +42,14 @@ class CreateUserForm(forms.Form):
     username = forms.CharField(label='User name')
     first_name = forms.CharField(label='First name')
     last_name = forms.CharField(label='Last name')
-    date = forms.DateField(label='Date', initial=datetime.date.today, widget=forms.SelectDateWidget)
     email = forms.EmailField(label='User email')
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
 
     def clean(self):
+
+        print("in the clean function of CreateUserForm class")
+
         cleaned_data = super(CreateUserForm, self).clean()
 
         username = cleaned_data.get('username')
@@ -58,7 +60,22 @@ class CreateUserForm(forms.Form):
         password1 = cleaned_data.get('password1')
         password2 = cleaned_data.get('password2')
 
-        if not (username and first_name and last_name and date and email and password1 and password2):
+
+        print("^" * 30)
+        print(username)
+        print(first_name)
+        print(last_name)
+        print(email)
+        print(date)
+        print(password1)
+        print(password2)
+        print("^" * 30)
+
+        if not (password1 == password2):
+            print("Password does not match, please type in two passwords again.")
+            raise forms.ValidationError("Password does not match, please type in two passwords again.")
+
+        if not (username and first_name and last_name and email and password1 and password2):
             print("There are some fields which are None.")
             raise forms.ValidationError("There are some fields which are None.")
 
@@ -71,6 +88,8 @@ class CreateUserForm(forms.Form):
             print("The username already exist.")
             raise forms.ValidationError("The username already exist.")
 
+        return username
+
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name')
 
@@ -78,6 +97,7 @@ class CreateUserForm(forms.Form):
             print("The first_name already exist.")
             raise forms.ValidationError('The first_name already exist.')
 
+        return first_name
 
     def clean_last_name(self):
         last_name = self.cleaned_data.get('last_name')
@@ -85,3 +105,5 @@ class CreateUserForm(forms.Form):
         if(len(User.objects.filter(last_name = last_name))):
             print("The last name already exist.")
             raise forms.ValidationError("The last_name already exist.")
+
+        return last_name
