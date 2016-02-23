@@ -57,4 +57,9 @@ urlpatterns = [
 
     url(r'show_users/$', 'WebApp.views.show_users', name='show_users'),
 
+    url(r'user_detail/(?P<user_id>\d+)$', 'WebApp.views.user_detail', name='user_detail'),
+
+    url(r'delete_user/(?P<user_id>\d+)$', 'WebApp.views.delete_user', name='delete_user'),
+
+
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

@@ -329,3 +329,50 @@ def show_users(request):
     context['users'] = users
 
     return render(request, 'WebApp/show_users.html', context)
+
+
+
+
+
+@login_required
+def user_detail(request, user_id):
+    print("in the user_detail function")
+
+    print(request)
+    print(user_id)
+
+    context = {}
+    context['user'] = request.user
+
+    selected_user = User.objects.get(id = user_id)
+    context['selected_user'] = selected_user
+
+    print(selected_user)
+    print(selected_user.username)
+    print(selected_user.first_name)
+    print(selected_user.last_name)
+    print(selected_user.email)
+    print(selected_user.date_joined)
+
+    return render(request, 'WebApp/user_detail.html', context)
+
+
+@login_required
+def delete_user(request, user_id):
+    print("in the delete_user function")
+
+    print(request)
+    print(user_id)
+
+    context = {}
+
+    context['user'] = request.user
+
+    selected_user = User.objects.get(id = user_id)
+    selected_user.delete()
+    print("already delete the selected_user")
+
+    return HttpResponseRedirect(reverse("show_users"))
+
+
+

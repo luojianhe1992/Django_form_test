@@ -33,24 +33,33 @@
 
         <div class="table-responsive">
             <table class="table table-hover" border="3">
-                <col width="10%">
-                <col width="20%">
-                <col width="20%">
+
 
                 <thead>
                 <tr>
-                    <th colspan="6"><h3 align="center">Here are all the Users.</h3></th>
+                    <th colspan="7"><h3 align="center">Here are all the Users.</h3></th>
                 </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td><label>Username</label></td>
+                        <td><label>First name</label></td>
+                        <td><label>Last name</label></td>
+                        <td><label>Date created</label></td>
+                        <td><label>Email</label></td>
+                        <td><label>Detail</label></td>
+                        <td><label>Delete</label></td>
+                    </tr>
                     {% for each_user in users %}
-                        <tr>
-                            <td>{{ each_user.username }}</td>
-                            <td>{{ each_user.first_name }}</td>
-                            <td>{{ each_user.last_name }}</td>
-                            <td>{{ each_user.date_joined }}</td>
-                            <td>{{ each_user.email }}</td>
-                        </tr>
+                    <tr>
+                        <td>{{ each_user.username }}</td>
+                        <td>{{ each_user.first_name }}</td>
+                        <td>{{ each_user.last_name }}</td>
+                        <td>{{ each_user.date_joined }}</td>
+                        <td>{{ each_user.email }}</td>
+                        <td><a href="{% url 'user_detail' each_user.id %}"><button>Detail</button></a></td>
+                        <td><a href="{% url 'delete_user' each_user.id %}"><button>Delete</button></a></td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
