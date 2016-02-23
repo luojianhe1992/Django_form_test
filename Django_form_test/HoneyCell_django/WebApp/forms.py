@@ -1,6 +1,7 @@
 from django import forms
 from WebApp.models import *
 
+import datetime
 
 class BookForm(forms.Form):
     book_id = forms.CharField(label="Book id", max_length=100)
@@ -25,13 +26,62 @@ class BookForm(forms.Form):
 
         if not (book_id and book_name and book_description and book_file):
             print("There are some field is None.")
-            raise forms.ValidationError("There are some field is None.")
+            raise forms.ValidationError("There are some fields which are None.")
 
         return cleaned_data
 
     def clean_book_id(self):
-        book_id = self.clean_data.get('book_id')
+        book_id = self.cleaned_data.get('book_id')
         if len(Book.objects.filter(book_id=book_id)):
             raise forms.ValidationError("The book_id already exist.")
 
         return book_id
+
+
+class CreateUserForm(forms.Form):
+    username = forms.CharField(label='User name')
+    first_name = forms.CharField(label='First name')
+    last_name = forms.CharField(label='Last name')
+    date = forms.DateField(label='Date', initial=datetime.date.today, widget=forms.SelectDateWidget)
+    email = forms.EmailField(label='User email')
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+
+    def clean(self):
+        cleaned_data = super(CreateUserForm, self).clean()
+
+        username = cleaned_data.get('username')
+        first_name = cleaned_data.get('first_name')
+        last_name = cleaned_data.get('last_name')
+        date = cleaned_data.get('date')
+        email = cleaned_data.get('email')
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
+
+        if not (username and first_name and last_name and date and email and password1 and password2):
+            print("There are some fields which are None.")
+            raise forms.ValidationError("There are some fields which are None.")
+
+        return cleaned_data
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+
+        if(len(User.objects.filter(username = username))):
+            print("The username already exist.")
+            raise forms.ValidationError("The username already exist.")
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get('first_name')
+
+        if (len(User.objects.filter(first_name = first_name))):
+            print("The first_name already exist.")
+            raise forms.ValidationError('The first_name already exist.')
+
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+
+        if(len(User.objects.filter(last_name = last_name))):
+            print("The last name already exist.")
+            raise forms.ValidationError("The last_name already exist.")

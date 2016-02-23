@@ -55,4 +55,6 @@ urlpatterns = [
 
     url(r'create_new_user_using_forms/$', 'WebApp.views.create_new_user_using_forms', name='create_new_user_using_forms'),
 
+    url(r'show_users/$', 'WebApp.views.show_users', name='show_users'),
+
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

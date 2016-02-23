@@ -274,3 +274,58 @@ def create_new_user_using_forms(request):
     if request.method == "GET":
         print("in the GET method")
 
+        form = CreateUserForm()
+        context['form'] = form
+
+        print("^" * 30)
+        print(form)
+        print("^" * 30)
+
+        return render(request, 'WebApp/create_new_user_using_forms.html', context)
+
+    else:
+        print("in the POST method")
+
+        form = CreateUserForm(request.POST)
+        context['form'] = form
+
+        if not form.is_valid():
+            print("The form is not valid.")
+            return render(request, 'WebApp/create_new_user_using_forms.html', context)
+
+        print("^" * 30)
+        print(form)
+        print(request.POST['username'])
+        print(request.POST['first_name'])
+        print(request.POST['last_name'])
+        print(request.POST['date'])
+        print(request.POST['email'])
+        print(request.POST['password1'])
+        print(request.POST['password2'])
+        print("^" * 30)
+
+        new_user_instance = User(username=request.POST['user_name'],
+                                 first_name=request.POST['first_name'],
+                                 last_name=request.POST['last_name'],
+                                 date_joined=request.POST['date_joined'],
+                                 email=request.POST['email'],
+                                 password=request.POST['password'])
+
+        new_user_instance.save()
+        print("new_user_instance already save.")
+
+        return HttpResponseRedirect(reverse("create_new_user_using_forms"))
+
+
+
+@login_required
+def show_users(request):
+    print("in the show_user function")
+
+    context = {}
+
+    context['user'] = request.user
+    users = User.objects.all()
+    context['users'] = users
+
+    return render(request, 'WebApp/show_users.html', context)
