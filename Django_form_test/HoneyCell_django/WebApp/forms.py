@@ -4,9 +4,10 @@ from WebApp.models import *
 import datetime
 
 class BookForm(forms.Form):
-    book_id = forms.CharField(label="Book id", max_length=100)
-    book_name = forms.CharField(label="Book name", max_length=100)
-    book_description = forms.CharField(label='Book description', max_length=100)
+    # in the widget, set the attrs' required to be True
+    book_id = forms.CharField(label="Book id", max_length=100, widget=forms.TextInput(attrs={'required': True}))
+    book_name = forms.CharField(label="Book name", max_length=100, widget=forms.TextInput(attrs={'required': True}))
+    book_description = forms.CharField(label='Book description', max_length=100, widget=forms.TextInput(attrs={'required': True}))
     book_file = forms.FileField(label="Book file")
 
     def clean(self):

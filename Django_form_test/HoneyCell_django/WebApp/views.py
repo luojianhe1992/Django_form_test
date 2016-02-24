@@ -496,16 +496,17 @@ def edit_book_using_forms(request, book_id):
         context['form'] = form
 
         book = Book.objects.get(id=book_id)
+        context['book'] = book
+
         # Have to delete the book instance at first, and then create a new instance
         book.delete()
         print("Already delete the book.")
 
         print(form)
 
-
-
         if not form.is_valid():
             print("The form is not valid.")
+
             return render(request, 'WebApp/edit_book_using_forms.html', context)
         else:
             print("The form is valid.")
@@ -609,7 +610,6 @@ def edit_book_using_modelform(request, book_id):
                     print("The book_description already exist.")
                     errors.append("The book_description already exist.")
                     return render(request, 'WebApp/edit_book_using_modelform.html', context)
-
 
             print(form)
             form.save()
