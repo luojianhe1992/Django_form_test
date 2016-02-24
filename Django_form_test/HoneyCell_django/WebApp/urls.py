@@ -61,5 +61,13 @@ urlpatterns = [
 
     url(r'delete_user/(?P<user_id>\d+)$', 'WebApp.views.delete_user', name='delete_user'),
 
+    # This book_id is the Book object default id instead of the attribute book_id
+    url(r'edit_book/(?P<book_id>\d+)$', 'WebApp.views.edit_book', name='edit_book'),
+
+    # This book_id is the Book object default id instead of the attribute book_id
+    url(r'edit_book_using_forms/(?P<book_id>\d+)$', 'WebApp.views.edit_book_using_forms', name='edit_book_using_forms'),
+
+    # This book_id is the Book object default id instead of the attribute book_id
+    url(r'edit_book_using_modelform/(?P<book_id>\d+)$', 'WebApp.views.edit_book_using_modelform', name='edit_book_using_modelform'),
 
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

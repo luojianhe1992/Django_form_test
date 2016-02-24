@@ -34,9 +34,86 @@ class BookForm(forms.Form):
         book_id = self.cleaned_data.get('book_id')
         if len(Book.objects.filter(book_id=book_id)):
             raise forms.ValidationError("The book_id already exist.")
+        return book_id
+
+    def clean_book_name(self):
+        book_name = self.cleaned_data.get('book_name')
+        if len(Book.objects.filter(book_name=book_name)):
+            raise forms.ValidationError("The book_name already exist.")
+        return book_name
+
+    def clean_book_description(self):
+        book_description = self.cleaned_data.get('book_description')
+        if len(Book.objects.filter(book_description=book_description)):
+            raise forms.ValidationError("The book_description already exist.")
+        return book_description
+
+
+class BookModelForm(forms.ModelForm):
+    class Meta:
+        model = Book
+
+        exclude = ('user',)
+
+        widgets = {'book_id': forms.TextInput,
+                   'book_name': forms.TextInput,
+                   'book_description': forms.Textarea,
+                   'book_file': forms.FileInput}
+
+
+    # override the clean function
+    def clean(self):
+        print("in the BookModelForm clean() function.")
+
+        cleaned_data = super(BookModelForm, self).clean()
+
+        book_id = self.cleaned_data.get('book_id')
+        book_name = self.cleaned_data.get('book_name')
+        book_description = self.cleaned_data.get('book_description')
+        book_file = self.cleaned_data.get('book_file')
+
+        print("%" * 30)
+        print(book_id)
+        print(book_name)
+        print(book_description)
+        print(book_file)
+        print("%" * 30)
+
+        if not (book_id and book_name and book_description and book_file):
+            print("There are some fields which are None.")
+            raise forms.ValidationError("There are some fields which are None.")
+
+        return cleaned_data
+
+    def clean_book_id(self):
+        print("in the clean_book_id function of BookModelForm")
+
+        book_id = self.cleaned_data.get('book_id')
+
+        if not book_id:
+            raise forms.ValidationError("Please type in book_id.")
 
         return book_id
 
+    def clean_book_name(self):
+        print("in the clean_book_name function of BookModelForm.")
+
+        book_name = self.cleaned_data.get('book_name')
+
+        if not book_name:
+            raise forms.ValidationError("Please type in book_name")
+
+        return book_name
+
+    def clean_book_description(self):
+        print("in the clean_book_description function of BookModelForm.")
+
+        book_description = self.cleaned_data.get('book_description')
+
+        if not book_description:
+            raise forms.ValidationError("Please type in book_description")
+
+        return book_description
 
 class CreateUserForm(forms.Form):
     username = forms.CharField(label='User name')

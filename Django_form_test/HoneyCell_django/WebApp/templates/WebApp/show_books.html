@@ -34,15 +34,18 @@
         <div class="table-responsive">
             <table class="table table-hover" border="3">
                 <col width="10%">
+                <col width="10%">
+                <col width="10%">
                 <col width="20%">
-                <col width="20%">
-                <col width="30%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
                 <col width="10%">
                 <col width="10%">
 
                 <thead>
                 <tr>
-                    <th colspan="6"><h3 align="center">Here are all the books.</h3></th>
+                    <th colspan="9"><h3 align="center">Here are all the books.</h3></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -52,8 +55,19 @@
                         <td>{{ book.book_name }}</td>
                         <td>{{ book.book_description }}</td>
                         <td><a href="{{ book.book_file.url }}">{{ book.book_file }}</a></td>
+
+                        {# Using Book object's book_id attribute as second argument #}
                         <td><a href="{% url 'book_detail' book.book_id %}">Detail</a></td>
                         <td><a href="{% url 'delete_book' book.book_id %}">Delete</a></td>
+
+                        {# Using Book object's default id as second argument #}
+                        <td><a href="{% url 'edit_book' book.id %}">Edit</a></td>
+
+                        {# Using Book object's default id as second argument #}
+                        <td><a href="{% url 'edit_book_using_forms' book.id %}">Edit_Book_Using_Forms</a></td>
+                        <td><a href="{% url 'edit_book_using_modelform' book.id %}">Edit_Book_Using_ModelForm</a></td>
+
+
                     </tr>
                 {% endfor %}
 
@@ -67,11 +81,11 @@
 
         <hr>
 
-        <h2 align="center"><a href="{% url 'show_users' %}">Show all user</a></h2>
+        <h2 align="center"><a href="{% url 'save_book_using_forms' %}"><button>Back to save book using forms</button></a></h2>
 
         <hr>
 
-        <h2 align="center"><a href="{% url 'save_book_using_forms' %}"><button>Back to save book using forms</button></a></h2>
+        <h2 align="center"><a href="{% url 'show_users' %}">Show all user</a></h2>
 
     </div>
 </div>

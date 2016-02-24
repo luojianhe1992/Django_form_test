@@ -205,7 +205,6 @@ def save_book_using_forms(request):
         print("*" * 10)
         print(request.FILES['book_file'])
         print("*" * 10)
-
         print("^" * 30)
 
         if len(Book.objects.filter(user=request.user, book_id=request.POST['book_id'])) != 0:
@@ -369,6 +368,254 @@ def delete_user(request, user_id):
     print("already delete the selected_user")
 
     return HttpResponseRedirect(reverse("show_users"))
+
+
+@login_required
+# This book_id stand for the Book object default id instead of the attribute book_id
+def edit_book(request, book_id):
+    print("in the edit_book function.")
+
+    print(request)
+
+    print(book_id)
+
+    context = {}
+
+    errors = []
+
+    context['errors'] = errors
+
+    context['user'] = request.user
+
+    if request.method == "GET":
+
+        print("in the GET request of edit_book function")
+
+        # The book_id is the id of the Book object
+        book = Book.objects.get(id = book_id)
+        context['book'] = book
+
+        print(book.book_id)
+        print(book.book_name)
+        print(book.book_description)
+        print(book.book_file)
+
+
+        return render(request, 'WebApp/edit_book.html', context)
+
+    else:
+        print("in the POST request of edit_book function")
+
+        # The book_id is the id of the Book object
+        book = Book.objects.get(id = book_id)
+        context['book'] = book
+
+        print(book.book_id)
+        print(book.book_name)
+        print(book.book_description)
+        print(book.book_file)
+
+
+        if not (request.POST['book_id'] and request.POST['book_name'] and request.POST['book_description'] and request.FILES['book_file']):
+            print("There are some field which are None.")
+            errors.append("There are some field which are None.")
+
+            return render(request, 'WebApp/edit_book.html', context)
+
+        if (book.book_id != request.POST['book_id']) and (len(Book.objects.filter(book_id=request.POST['book_id'])) > 0):
+            print("The book_id already exist.")
+            errors.append("The book_id already exist.")
+
+            return render(request, 'WebApp/edit_book.html', context)
+
+        if (book.book_name != request.POST['book_name']) and (len(Book.objects.filter(book_name=request.POST['book_name'])) > 0):
+            print("The book_name already exist.")
+            errors.append("The book_name already exist.")
+
+            return render(request, 'WebApp/edit_book.html', context)
+
+        if (book.book_description != request.POST['book_description']) and (len(Book.objects.filter(book_description=request.POST['book_description'])) > 0):
+            print("The book_description already exist.")
+            errors.append("The book_description already exist.")
+
+            return render(request, 'WebApp/edit_book.html', context)
+
+        book.book_id = request.POST['book_id']
+        book.book_name = request.POST['book_name']
+        book.book_description = request.POST['book_description']
+        book.book_file = request.FILES['book_file']
+        book.save()
+        print("Already change the attribute of book instance")
+
+        print(book.book_id)
+        print(book.book_name)
+        print(book.book_description)
+        print(book.book_file)
+
+        return HttpResponseRedirect(reverse("show_books"))
+
+
+@login_required
+# This book_id stand for the Book object default id instead of the attribute book_id
+def edit_book_using_forms(request, book_id):
+    print("in the edit_book_using_forms function")
+
+    print(request)
+    print(book_id)
+
+    context = {}
+
+    context['user'] = request.user
+
+    errors = []
+    context['errors'] = errors
+
+    if request.method == "GET":
+        print("in the GET method of edit_book_using_forms")
+        book = Book.objects.get(id=book_id)
+        context['book'] = book
+
+        # book_data = {'book_id': book.book_id,
+        #              'book_name': book.book_name,
+        #              'book_description': book.book_description,
+        #              'book_file': book.book_file
+        #             }
+        # initialize the BookForm object
+        # form = BookForm(book_data)
+
+        # When you only use BookForm in edit_book_using_forms, you can not keep the original information, you have to create a new blank form.
+        form = BookForm()
+        print(form)
+        context['form'] = form
+        return render(request, 'WebApp/edit_book_using_forms.html', context)
+
+    else:
+        print("in the POST method of edit_book_using_forms")
+
+        form = BookForm(request.POST, request.FILES)
+        context['form'] = form
+
+        book = Book.objects.get(id=book_id)
+        # Have to delete the book instance at first, and then create a new instance
+        book.delete()
+        print("Already delete the book.")
+
+        print(form)
+
+
+
+        if not form.is_valid():
+            print("The form is not valid.")
+            return render(request, 'WebApp/edit_book_using_forms.html', context)
+        else:
+            print("The form is valid.")
+
+            new_book_instance = Book(user=request.user,
+                                     book_id=request.POST['book_id'],
+                                     book_name=request.POST['book_name'],
+                                     book_description=request.POST['book_description'],
+                                     book_file=request.FILES['book_file']
+                                     )
+
+            print("%" * 30)
+            print(new_book_instance)
+            print(new_book_instance.book_id)
+            print(new_book_instance.book_name)
+            print(new_book_instance.book_description)
+            print(new_book_instance.book_file)
+            print("%" * 30)
+
+            new_book_instance.save()
+
+            print("Already change the attribute of book instance")
+
+            print(new_book_instance.book_id)
+            print(new_book_instance.book_name)
+            print(new_book_instance.book_description)
+            print(new_book_instance.book_file)
+
+            return HttpResponseRedirect(reverse("show_books"))
+
+
+
+
+@login_required
+def edit_book_using_modelform(request, book_id):
+    print("in the function of edit_book_using_modelform")
+
+    print(request)
+
+    print(book_id)
+
+    context = {}
+    context['user'] = request.user
+
+    errors = []
+    context['errors'] = errors
+
+    if request.method == "GET":
+        print("in the GET method of edit_book_using_modelform function.")
+
+        book = Book.objects.get(id=book_id)
+        context['book'] = book
+
+        form = BookModelForm(instance=book)
+        context['form'] = form
+
+        return render(request, 'WebApp/edit_book_using_modelform.html', context)
+
+    else:
+        print("in the POST method of edit_book_using_modelform function.")
+
+        book = Book.objects.get(id=book_id)
+        context['book'] = book
+
+        # Store the original attribute of Book object.
+        book_clone = {'book_id': book.book_id,
+                      'book_name': book.book_name,
+                      'book_description': book.book_description}
+
+        form = BookModelForm(request.POST, request.FILES, instance=book)
+        context['form'] = form
+
+        if not form.is_valid():
+            print("The BookModelForm is not valid.")
+            context['form'] = form
+            return render(request, 'WebApp/edit_book_using_modelform.html', context)
+        else:
+            print("The BookModelForm is valid.")
+
+            if len(Book.objects.filter(book_id=form.cleaned_data.get('book_id'))) == 1:
+
+                print("%" * 40)
+                print(book.book_id)
+                print(form.cleaned_data.get('book_id'))
+                print("%" * 40)
+
+                if book_clone['book_id'] != form.cleaned_data.get('book_id'):
+                    print("The book_id already exist.")
+                    errors.append("The book_id already exist.")
+                    return render(request, 'WebApp/edit_book_using_modelform.html', context)
+
+
+            if len(Book.objects.filter(book_name=form.cleaned_data.get('book_name'))) == 1:
+                if book_clone['book_name'] != form.cleaned_data.get('book_name'):
+                    print("The book_name already exist.")
+                    errors.append("The book_name already exist.")
+                    return render(request, 'WebApp/edit_book_using_modelform.html', context)
+
+            if len(Book.objects.filter(book_description=form.cleaned_data.get('book_description'))) == 1:
+                if book_clone['book_description'] != form.cleaned_data.get('book_description'):
+                    print("The book_description already exist.")
+                    errors.append("The book_description already exist.")
+                    return render(request, 'WebApp/edit_book_using_modelform.html', context)
+
+
+            print(form)
+            form.save()
+            print("Already save the BookModelForm.")
+
+            return HttpResponseRedirect(reverse('show_books'))
 
 
 
