@@ -794,10 +794,53 @@ def edit_foo(request, foo_id):
     context = {}
     context['user'] = request.user
 
+    errors = []
+    context['errors'] = errors
+
     if request.method == "GET":
         print("in the GET method of edit_foo function.")
 
         foo = FooModel.objects.get(id=foo_id)
         context['foo'] = foo
 
-        return render(request, 'WebApp/')
+        return render(request, 'WebApp/edit_foo.html', context)
+
+    else:
+        print("in the POST method of edit_foo function.")
+
+        foo = FooModel.objects.get(id=foo_id)
+        context['foo'] = foo
+
+        if not request.POST['foo_name']:
+            print("There are some fields which are None.")
+            errors.append("There are some fields which are None.")
+
+            return render(request, 'WebApp/edit_foo.html', context)
+
+        if (request.POST['foo_name'] != foo.foo_name and len(FooModel.objects.filter(foo_name=request.POST['foo_name'])) > 0):
+            print("The foo_name already exist.")
+            errors.append("The foo_name already exist.")
+
+            return render(request, 'WebApp/edit_foo.html', context)
+
+        foo.foo_name = request.POST['foo_name']
+        foo.save()
+
+        print("Already change the attribute of FooModel object.")
+
+        return HttpResponseRedirect(reverse('show_foos'))
+
+
+@login_required
+def delete_foo(request, foo_id):
+    print("in the delete_foo function")
+
+    print(request)
+    print(foo_id)
+
+    foo = FooModel.objects.get(id=foo_id)
+    foo.delete()
+
+    print("Already delete the FooModel object.")
+
+    return HttpResponseRedirect(reverse("show_foos"))

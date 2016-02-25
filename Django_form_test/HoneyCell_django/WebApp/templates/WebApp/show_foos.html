@@ -42,21 +42,35 @@
                 <col width="20%">
                 <col width="20%">
 
-
                 <thead>
                 <tr>
                     <th colspan="6"><h3 align="center">Here are all the foos.</h3></th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for foo in foos%}
+
+                <t>
+                    <td><label>Foo name</label></td>
+                    <td><label>Foo time created</label></td>
+                    <td><label>Foo time changed</label></td>
+                    <td><label>Detail</label></td>
+                    <td><label>Edit</label></td>
+                   /<td><label>Delete</label></td>
+                </t>
+                {% for foo in foos %}
                     <tr>
                         <td>{{ foo.foo_name }}</td>
                         <td>{{ foo.time_created }}</td>
                         <td>{{ foo.time_changed }}</td>
-                        <td><a href=""><button>Detail</button></a></td>
-                        <td><a href=""><button>Edit</button></a></td>
-                        <td><a href=""><button>Delete</button></a></td>
+                        <td><a href="{% url 'foo_detail' foo.id %}">
+                            <button>Detail</button>
+                        </a></td>
+                        <td><a href="{% url 'edit_foo' foo.id %}">
+                            <button>Edit</button>
+                        </a></td>
+                        <td><a href="{% url 'delete_foo' foo.id %}">
+                            <button>Delete</button>
+                        </a></td>
                     </tr>
                 {% endfor %}
 
@@ -66,19 +80,27 @@
 
         <hr>
 
-        <h2 align="center"><a href="{% url 'add_foo' %}"><button>Back to add foo</button></a></h2>
+        <h2 align="center"><a href="{% url 'add_foo' %}">
+            <button>Back to add foo</button>
+        </a></h2>
 
         <hr>
 
-        <h2 align="center"><a href="{% url 'new_message' %}"><button>Back to new_message</button></a></h2>
+        <h2 align="center"><a href="{% url 'new_message' %}">
+            <button>Back to new_message</button>
+        </a></h2>
 
         <hr>
 
-        <h2 align="center"><a href="{% url 'message' %}"><button>Back to save book</button></a></h2>
+        <h2 align="center"><a href="{% url 'message' %}">
+            <button>Back to save book</button>
+        </a></h2>
 
         <hr>
 
-        <h2 align="center"><a href="{% url 'save_book_using_forms' %}"><button>Back to save book using forms</button></a></h2>
+        <h2 align="center"><a href="{% url 'save_book_using_forms' %}">
+            <button>Back to save book using forms</button>
+        </a></h2>
 
         <hr>
 
