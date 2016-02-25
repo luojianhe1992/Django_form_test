@@ -25,7 +25,7 @@ class Memo(models.Model):
     user = models.ForeignKey(User)
     memo_name = models.CharField(max_length=100)
     memo_description = models.TextField(max_length=1000)
-    memo_date = models.DateTimeField(default=datetime.now)
+    memo_datetime = models.DateTimeField(default=datetime.now)
 
 
 class FooModel(models.Model):

@@ -70,4 +70,22 @@ urlpatterns = [
     # This book_id is the Book object default id instead of the attribute book_id
     url(r'edit_book_using_modelform/(?P<book_id>\d+)$', 'WebApp.views.edit_book_using_modelform', name='edit_book_using_modelform'),
 
+    url(r'new_message/$', 'WebApp.views.new_message', name='new_message'),
+
+    url(r'add_memo/$', 'WebApp.views.add_memo', name='add_memo'),
+
+    url(r'show_memos/$', 'WebApp.views.show_memos', name='show_memos'),
+
+    url(r'add_foo/$', 'WebApp.views.add_foo', name='add_foo'),
+
+    url(r'show_foos/$', 'WebApp.views.show_foos', name='show_foos'),
+
+    url(r'foo_detail/(?P<foo_id>\d+)$', 'WebApp.views.foo_detail', name='foo_detail'),
+
+    url(r'edit_foo/(?P<foo_id>\d+)$', 'WebApp.views.edit_foo', name='edit_foo'),
+
+    url(r'delete_foo/(?P<foo_id>\d+)$', 'WebApp.views.delete_foo', name='delete_foo'),
+
+
+
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

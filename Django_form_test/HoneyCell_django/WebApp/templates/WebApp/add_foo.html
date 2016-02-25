@@ -28,11 +28,11 @@
 
 <div class="container">
     <div class="row" align="center">
-        <h1>This is form test.</h1>
+        <h1>This is add_foo page.</h1>
 
         <hr>
 
-        <form action="{% url 'save_book' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+        <form action="{% url 'add_foo' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
             <div class="table-responsive">
                 <table class="table table-hover">
                     <h3 align="center" style="color: red">
@@ -42,44 +42,20 @@
                     </h3>
                     <thead>
                     <tr>
-                        <th colspan="2"><h3 align="center">Add new books</h3></th>
+                        <th colspan="2"><h3 align="center">Add new foo</h3></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>
-                            <label>Book id: </label>
+                            <label>foo name: </label>
                         </td>
                         <td>
-                            <input type="text" name="book_id" required/>
+                            <input type="text" name="foo_name" required/>
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <label>Book name: </label>
-                        </td>
-                        <td>
-                            <input type="text" name="book_name" required/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Book description: </label>
-                        </td>
-                        <td>
-                            <input type="text" name="book_description" required/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Book file:</label>
-                        </td>
-                        <td>
-                            <input type="file" name="book_file" required/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><p align="center"><input type="submit" value="Save the book"></p></td>
+                        <td colspan="2"><p align="center"><input type="submit" value="Save the foo"></p></td>
                     </tr>
                     </tbody>
                 </table>
@@ -89,17 +65,15 @@
 
         <hr>
 
+        <h2 align="center"><a href="{% url 'show_foos' %}">Show all foos</a></h2>
+
+        <hr>
+
         <h2 align="center"><a href="{% url 'show_books' %}">Show all books</a></h2>
 
         <hr>
 
         <h2 align="center"><a href="{% url 'create_new_user_using_forms' %}"><button>Create new user using form</button></a></h2>
-
-        <hr>
-
-        <h2 align="center"><a href="{% url 'new_message' %}"><button>Go to new_message page</button></a></h2>
-
-        <hr>
 
     </div>
 </div>

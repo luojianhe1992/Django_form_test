@@ -28,21 +28,23 @@
 
 <div class="container">
     <div class="row" align="center">
-        <h1>This is form test.</h1>
+        <h1>This is page for editing the book.</h1>
 
         <hr>
 
-        <form action="{% url 'save_book' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+        <form action="{% url 'edit_book' book.id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
             <div class="table-responsive">
                 <table class="table table-hover">
-                    <h3 align="center" style="color: red">
-                        {% for error in errors %}
-                            {{ error }}
-                        {% endfor %}
+                    <h3 align="center">
+                        Edit book
                     </h3>
                     <thead>
                     <tr>
-                        <th colspan="2"><h3 align="center">Add new books</h3></th>
+                        <th colspan="2"><h3 align="center" style="color: red">
+
+                        {% for error in errors %}
+                            {{ error }}
+                        {% endfor %}</h3></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -51,7 +53,7 @@
                             <label>Book id: </label>
                         </td>
                         <td>
-                            <input type="text" name="book_id" required/>
+                            <input type="text" name="book_id" value="{{ book.book_id }}" required/>
                         </td>
                     </tr>
                     <tr>
@@ -59,7 +61,7 @@
                             <label>Book name: </label>
                         </td>
                         <td>
-                            <input type="text" name="book_name" required/>
+                            <input type="text" name="book_name" value="{{ book.book_name }}" required/>
                         </td>
                     </tr>
                     <tr>
@@ -67,7 +69,7 @@
                             <label>Book description: </label>
                         </td>
                         <td>
-                            <input type="text" name="book_description" required/>
+                            <input type="text" name="book_description" value="{{ book.book_description }}" required/>
                         </td>
                     </tr>
                     <tr>
@@ -75,7 +77,7 @@
                             <label>Book file:</label>
                         </td>
                         <td>
-                            <input type="file" name="book_file" required/>
+                            <input type="file" name="book_file" value="{{ book.book_file }}" required/>
                         </td>
                     </tr>
                     <tr>
@@ -89,17 +91,11 @@
 
         <hr>
 
+
         <h2 align="center"><a href="{% url 'show_books' %}">Show all books</a></h2>
 
-        <hr>
 
         <h2 align="center"><a href="{% url 'create_new_user_using_forms' %}"><button>Create new user using form</button></a></h2>
-
-        <hr>
-
-        <h2 align="center"><a href="{% url 'new_message' %}"><button>Go to new_message page</button></a></h2>
-
-        <hr>
 
     </div>
 </div>

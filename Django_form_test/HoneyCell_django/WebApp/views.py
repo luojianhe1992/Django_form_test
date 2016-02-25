@@ -619,3 +619,185 @@ def edit_book_using_modelform(request, book_id):
 
 
 
+@login_required
+def new_message(request):
+    print("in the function of new_message.")
+
+    context = {}
+    context['user'] = request.user
+
+    return render(request, 'WebApp/new_message.html', context)
+
+
+
+def add_memo(request):
+    print("in the function of add_memo.")
+
+    context = {}
+
+    context['user'] = request.user
+
+    errors = []
+    context['errors'] = errors
+
+    if request.method == "GET":
+        print("in the GET method.")
+
+        return render(request, 'WebApp/add_memo.html', context)
+
+    else:
+        print("in the POST method.")
+
+        if not (request.POST['memo_name'] and request.POST['memo_description'] and request.POST['memo_datetime']):
+            print("There are some field which are None. Please type in again.")
+            errors.append("There are some field which are None. Please type in again.")
+
+            context['memo_name'] = request.POST['memo_name']
+            context['memo_description'] = request.POST['memo_description']
+            context['memo_datetime'] = request.POST['memo_datetime']
+
+            return render(request, 'WebApp/add_memo.html', context)
+
+        if len(Memo.objects.filter(memo_name=request.POST['memo_name'])):
+            print("The memo_name already exist.")
+            errors.append("The memo_name already exist.")
+
+            context['memo_name'] = request.POST['memo_name']
+            context['memo_description'] = request.POST['memo_description']
+            context['memo_datetime'] = request.POST['memo_datetime']
+
+            return render(request, 'WebApp/add_memo.html', context)
+
+        if len(Memo.objects.filter(memo_description=request.POST['memo_description'])):
+            print("The memo_description already exist.")
+            errors.append("The memo_description already exist.")
+
+            context['memo_name'] = request.POST['memo_name']
+            context['memo_description'] = request.POST['memo_description']
+            context['memo_datetime'] = request.POST['memo_datetime']
+
+            return render(request, 'WebApp/add_memo.html', context)
+
+        if len(Memo.objects.filter(memo_datetime=request.POST['memo_datetime'])):
+            print("The datetime already exist.")
+            errors.append("The datetime already exist.")
+
+            context['memo_name'] = request.POST['memo_name']
+            context['memo_description'] = request.POST['memo_description']
+            context['memo_datetime'] = request.POST['memo_datetime']
+
+            return render(request, 'WebApp/add_memo.html', context)
+
+        new_memo_instance = Memo(user=request.user,
+                                 memo_name=request.POST['memo_name'],
+                                 memo_description=request.POST['memo_description'],
+                                 memo_datetime=request.POST['memo_datetime'])
+        new_memo_instance.save()
+        print("The new_memo_instance save.")
+
+        return render(request, 'WebApp/add_memo.html', context)
+
+@login_required
+def show_memos(request):
+    print("in the show_memos function")
+
+    context = {}
+    context['user'] = request.user
+
+    memos = Memo.objects.filter(user=request.user)
+    context['memos'] = memos
+
+    return render(request, 'WebApp/show_memos.html', context)
+
+
+@login_required
+def add_foo(request):
+    print("in the function of add_foo.")
+
+    context = {}
+    context['user'] = request.user
+
+    errors = []
+    context['errors'] = errors
+
+    if request.method == "GET":
+        print("in the GET method of add_foo function.")
+
+        return render(request, 'WebApp/add_foo.html', context)
+
+    else:
+        print("in the POST method of add_foo function.")
+
+        foo_name = request.POST['foo_name']
+
+        if not(foo_name):
+            print("There are some fields which are None.")
+            errors.append("There are some fields which are None.")
+
+            context['foo_name'] = foo_name
+
+            return render(request, 'WebApp/add_foo.html', context)
+
+        if len(FooModel.objects.filter(foo_name=foo_name)):
+            print("The foo_name already exist.")
+            errors.append("The foo_name already exist.")
+
+            context['foo_name'] = foo_name
+
+            return render(request, 'WebApp/add_foo.html', context)
+
+
+        new_foo_instance = FooModel(foo_name=foo_name)
+        new_foo_instance.save()
+        print("The new_foo_instance already save.")
+
+
+    return render(request, 'WebApp/add_foo.html', context)
+
+
+@login_required
+def show_foos(request):
+    print("in the function of show_foos.")
+
+    context = {}
+    context['user'] = request.user
+
+    foos = FooModel.objects.all()
+    context['foos'] = foos
+
+    return render(request, 'WebApp/show_foos.html', context)
+
+
+@login_required
+def foo_detail(request, foo_id):
+    print("in the function of foo_detail")
+
+    print(request)
+    print(foo_id)
+
+    context = {}
+    context['user'] = request.user
+
+    foo = FooModel.objects.get(id=foo_id)
+    context['foo'] = foo
+
+    return render(request, 'WebApp/foo_detail.html', context)
+
+
+@login_required
+def edit_foo(request, foo_id):
+    print("in the function of edit_foo")
+
+    print(request)
+    print(foo_id)
+
+    context = {}
+    context['user'] = request.user
+
+    if request.method == "GET":
+        print("in the GET method of edit_foo function.")
+
+        foo = FooModel.objects.get(id=foo_id)
+        context['foo'] = foo
+
+        return render(request, 'WebApp/')
