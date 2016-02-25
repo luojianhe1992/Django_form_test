@@ -678,7 +678,7 @@ def add_memo(request):
 
             return render(request, 'WebApp/add_memo.html', context)
 
-        if len(Memo.objects.filter(memo_datetime=request.POST['memo_datetime'])):
+        if len(Memo.objects.filter(user=request.user, memo_datetime=request.POST['memo_datetime'])):
             print("The datetime already exist.")
             errors.append("The datetime already exist.")
 
@@ -844,3 +844,122 @@ def delete_foo(request, foo_id):
     print("Already delete the FooModel object.")
 
     return HttpResponseRedirect(reverse("show_foos"))
+
+
+
+@login_required
+def memo_detail(request, memo_id):
+    print("in the foo_detail function.")
+
+    print(request)
+    print(memo_id)
+
+    context = {}
+    context['user'] = request.user
+
+    memo = Memo.objects.get(id=memo_id)
+    context['memo'] = memo
+
+    return render(request, 'WebApp/memo_detail.html', context)
+
+
+@login_required
+def edit_memo(request, memo_id):
+    print("in the edit_memo function.")
+
+    print(request)
+    print(memo_id)
+
+    context = {}
+    context['user'] = request.user
+
+    errors = []
+    context['errors'] = errors
+
+    if request.method == "GET":
+        print("in the GET method of edit_memo function.")
+
+        memo = Memo.objects.get(id=memo_id)
+        context['memo'] = memo
+
+        return render(request, 'WebApp/edit_memo.html', context)
+
+    else:
+        print("in the POST method of edit_memo function.")
+
+        memo = Memo.objects.get(id=memo_id)
+        context['memo'] = memo
+
+        memo_name = request.POST['memo_name']
+        memo_description = request.POST['memo_description']
+        memo_datetime = request.POST['memo_datetime']
+        memo_datetime_hidden = request.POST['memo_datetime_hidden']
+
+        if not(memo_name and memo_description and memo_datetime_hidden):
+            print("There are some fields which are None.")
+            errors.append("There are some fields which are None.")
+
+            return render(request, 'WebApp/edit_memo.html', context)
+
+        if (memo_name != memo.memo_name and len(Memo.objects.filter(memo_name=memo_name)) > 0):
+            print("The memo_name already exist.")
+            errors.append("The memo_name already exist.")
+
+            return render(request, 'WebApp/edit_memo.html', context)
+
+        if (memo_description != memo.memo_description and len(Memo.objects.filter(memo_description=memo_description)) > 0):
+            print("The memo_description already exist.")
+            errors.append("The memo_description already exist.")
+
+            return render(request, 'WebApp/edit_memo.html', context)
+
+
+        print(memo_datetime_hidden)
+        print(memo.memo_datetime)
+
+        if memo_datetime:
+            print("User choose the date.")
+            print(memo_name)
+            print(memo_description)
+            print(memo_datetime)
+            print(memo_datetime_hidden)
+
+
+            memo.memo_name = memo_name
+            memo.memo_description = memo_description
+            memo.memo_datetime = memo_datetime
+            memo.save()
+            print("Already edit the Memo object.")
+
+            return HttpResponseRedirect(reverse("show_memos"))
+        else:
+            print("User does not choose the date.")
+
+            print(memo_name)
+            print(memo_description)
+            print(memo_datetime)
+            print(memo_datetime_hidden)
+
+            if memo_datetime_hidden == memo.memo_datetime:
+                print("memo_datetime_hidden == memo.memo_datetime")
+
+            memo.memo_name = memo_name
+            memo.memo_description = memo_description
+            # do not need to change the memo_datetime attribute of Memo object.
+            memo.save()
+            print("Already edit the Memo object.")
+
+            return HttpResponseRedirect(reverse("show_memos"))
+
+@login_required
+def delete_memo(request, memo_id):
+    print("in the function of delete_memo.")
+
+    print(request)
+    print(memo_id)
+
+    memo = Memo.objects.get(id=memo_id)
+    memo.delete()
+    print("Already delete the Memo object.")
+
+    return HttpResponseRedirect(reverse("show_memos"))

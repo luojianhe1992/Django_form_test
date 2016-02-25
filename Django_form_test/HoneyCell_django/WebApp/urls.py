@@ -80,12 +80,23 @@ urlpatterns = [
 
     url(r'show_foos/$', 'WebApp.views.show_foos', name='show_foos'),
 
+    # This foo_id is the FooModel object default id instead of the attribute foo_id
     url(r'foo_detail/(?P<foo_id>\d+)$', 'WebApp.views.foo_detail', name='foo_detail'),
 
+    # This foo_id is the FooModel object default id instead of the attribute foo_id
     url(r'edit_foo/(?P<foo_id>\d+)$', 'WebApp.views.edit_foo', name='edit_foo'),
 
+    # This foo_id is the FooModel object default id instead of the attribute foo_id
     url(r'delete_foo/(?P<foo_id>\d+)$', 'WebApp.views.delete_foo', name='delete_foo'),
 
+    # This memo_id is the Memo object default id instead of the attribute memo_id
+    url(r'memo_detail/(?P<memo_id>\d+)$', 'WebApp.views.memo_detail', name="memo_detail"),
+
+    # This memo_id is the Memo object default id instead of the attribute memo_id
+    url(r'edit_memo/(?P<memo_id>\d+)$', 'WebApp.views.edit_memo', name='edit_memo'),
+
+    # This memo_id is the Memo object default id instead of the attribute memo_id
+    url(r'delete_memo/(?P<memo_id>\d+)$', 'WebApp.views.delete_memo', name='delete_memo'),
 
 
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
