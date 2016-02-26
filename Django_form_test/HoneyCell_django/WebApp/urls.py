@@ -98,5 +98,21 @@ urlpatterns = [
     # This memo_id is the Memo object default id instead of the attribute memo_id
     url(r'delete_memo/(?P<memo_id>\d+)$', 'WebApp.views.delete_memo', name='delete_memo'),
 
+    url(r'add_picture/$', 'WebApp.views.add_picture', name='add_picture'),
+
+    url(r'show_pictures/$', 'WebApp.views.show_pictures', name='show_pictures'),
+
+    # This picture_id is the Picture object default id
+    url(r'picture_detail/(?P<picture_id>\d+)$', 'WebApp.views.picture_detail', name='picture_detail'),
+
+    # This picture_id is the Picture object default id
+    url(r'edit_picture/(?P<picture_id>\d+)$', 'WebApp.views.edit_picture', name='edit_picture'),
+
+    # This picture_id is the Picture object default id
+    url(r'delete_picture/(?P<picture_id>\d+)$', 'WebApp.views.delete_picture', name='delete_picture'),
+
+    # This url is for get picture_image
+    url(r'get_picture_image/(?P<picture_id>\d+)$', 'WebApp.views.get_picture_image', name='get_picture_image'),
+
 
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

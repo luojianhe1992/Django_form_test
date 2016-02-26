@@ -1,0 +1,109 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static "WebApp/css/bootstrap.css" %}" type="text/css">
+    <link rel="stylesheet" href="{% static "WebApp/css/result.css" %}" type="text/css">
+    <script src="{% static "WebApp/js/d3.min.js" %}"></script>
+    <script src="{% static "WebApp/js/dimple.v2.1.6.min.js" %}"></script>
+</head>
+
+<body>
+<div id="nav">
+    <div id="logo">
+        <a href="{% url 'index' %}"><img src="{% static "WebApp/img/logo.jpeg" %}" alt="logo"></a>
+    </div>
+    <ul id="navi">
+        <li class="navMenu"><a href="{% url 'honeycell' %}">HoneyCell</a></li>
+        <li class="navMenu"><a href="{% url 'upload' %}">New Task</a></li>
+        <li class="navMenu"><a href="{% url 'preprocess' %}">Preprocessing</a></li>
+        <li class="navMenu"><a href="{% url 'analytics' %}">Analytics</a></li>
+        <li class="navMenu"><a href="{% url 'visualization' %}">Visualization</a></li>
+        <li class="navMenu"><a href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+</div>
+
+<h2 class="log"> Hello {{ user }} </h2>
+
+<br>
+
+<div class="container">
+    <div class="row" align="center">
+
+        <div class="table-responsive">
+            <table class="table table-hover" border="3">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+                <col width="20%">
+                <col width="20%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+
+                <thead>
+                <tr>
+                    <th colspan="8"><h3 align="center">Here are all the pictures.</h3></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for picture in pictures%}
+                    <tr>
+                        <td><img src="{% url 'get_picture_image' picture.id %}" alt="{{ picture.id }}" style="width: 100px; height: 100px;"></td>
+                        <td>{{ picture.picture_name }}</td>
+                        <td>{{ picture.picture_image }}</td>
+                        <td>{{ picture.picture_time_created }}</td>
+                        <td>{{ picture.picture_time_changed }}</td>
+
+                        {# Using Picture object's default id as second argument #}
+                        <td><a href="{% url 'picture_detail' picture.id %}">Detail</a></td>
+
+                        {# Using Picture object's default id as second argument #}
+                        <td><a href="{% url 'edit_picture' picture.id %}">Edit</a></td>
+
+                        {# Using Picture object's default id as second argument #}
+                        <td><a href="{% url 'delete_picture' picture.id %}">Delete</a></td>
+
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+        <hr>
+
+        <h2 align="center"><a href="{% url 'add_picture' %}"><button>Back to add picture</button></a></h2>
+
+        <hr>
+
+        <h2 align="center"><a href="{% url 'new_message' %}"><button>Back to new_message</button></a></h2>
+
+        <hr>
+
+        <h2 align="center"><a href="{% url 'message' %}"><button>Back to save book</button></a></h2>
+
+        <hr>
+
+        <h2 align="center"><a href="{% url 'save_book_using_forms' %}"><button>Back to save book using forms</button></a></h2>
+
+        <hr>
+
+        <h2 align="center"><a href="{% url 'show_users' %}">Show all user</a></h2>
+
+    </div>
+</div>
+
+<h3>
+    Welcome to HoneyCell WebServer!
+</h3>
+<form method="get" action="{% url 'logout' %}">{% csrf_token %}
+    <p>
+        <button type="submit">Log Out</button>
+    </p>
+</form>
+
+</body>
+</html>
+

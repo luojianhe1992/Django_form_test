@@ -28,11 +28,11 @@
 
 <div class="container">
     <div class="row" align="center">
-        <h1>This is add_memo page.</h1>
+        <h1>This is add_picture page.</h1>
 
         <hr>
 
-        <form action="{% url 'add_memo' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+        <form action="{% url 'add_picture' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
             <div class="table-responsive">
                 <table class="table table-hover">
                     <h3 align="center" style="color: red">
@@ -42,36 +42,28 @@
                     </h3>
                     <thead>
                     <tr>
-                        <th colspan="2"><h3 align="center">Add new memo</h3></th>
+                        <th colspan="2"><h3 align="center">Add new picture</h3></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>
-                            <label>Memo name: </label>
+                            <label>Picture name: </label>
                         </td>
                         <td>
-                            <input type="text" name="memo_name" value="{{ memo_name }}" required/>
+                            <input type="text" name="picture_name" value="{{ picture_name }}" required/>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label>Memo description: </label>
+                            <label>Picture image: </label>
                         </td>
                         <td>
-                            <input type="text" name="memo_description" value="{{ memo_description }}" required/>
+                            <input type="file" name="picture_image" value="{{ picture_image }}" required/>
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <label>Memo datetime: </label>
-                        </td>
-                        <td>
-                            <input type="datetime-local" name="memo_datetime" value="{{ memo_datetime }}" required/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><p align="center"><input type="submit" value="Save the memo"></p></td>
+                        <td colspan="2"><p align="center"><input type="submit" value="Save the picture"></p></td>
                     </tr>
                     </tbody>
                 </table>
@@ -81,7 +73,7 @@
 
         <hr>
 
-        <h2 align="center"><a href="{% url 'show_memos' %}">Show all memos</a></h2>
+        <h2 align="center"><a href="{% url 'show_pictures' %}">Show all pictures</a></h2>
 
         <hr>
 

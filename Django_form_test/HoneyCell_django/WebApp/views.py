@@ -751,8 +751,7 @@ def add_foo(request):
         new_foo_instance.save()
         print("The new_foo_instance already save.")
 
-
-    return render(request, 'WebApp/add_foo.html', context)
+        return render(request, 'WebApp/add_foo.html', context)
 
 
 @login_required
@@ -963,3 +962,184 @@ def delete_memo(request, memo_id):
     print("Already delete the Memo object.")
 
     return HttpResponseRedirect(reverse("show_memos"))
+
+
+@login_required
+def add_picture(request):
+    print("in the add_picture function.")
+
+    context = {}
+    context['user'] = request.user
+
+    errors = []
+    context['errors'] = errors
+
+    if request.method == "GET":
+        print("in the GET request of add_picture function.")
+
+        return render(request, 'WebApp/add_picture.html', context)
+
+    else:
+        print("in the POST request of add_picture function.")
+
+        picture_name = request.POST['picture_name']
+        picture_image = request.FILES['picture_image']
+
+        if not (picture_name and picture_image):
+            print("There are some fields which are None.")
+            errors.append("There are some fields which are None.")
+
+            context['picture_name'] = picture_name
+            context['picture_image'] = picture_image
+
+            return render(request, 'WebApp/add_picture.html', context)
+
+        if len(Picture.objects.filter(picture_name=picture_name)):
+            print("The picture_name already exist.")
+            errors.append("The picture_name already exist.")
+
+            context['picture_name'] = picture_name
+            context['picture_image'] = picture_image
+
+            return render(request, 'WebApp/add_picture.html', context)
+
+
+        print("%" * 30)
+        print(picture_name)
+        print(picture_image)
+        print("%" * 30)
+
+        new_picture_instance = Picture(user=request.user,
+                                       picture_name=picture_name,
+                                       picture_image=picture_image)
+
+        new_picture_instance.save()
+        print("Already save the new_picture_instance.")
+
+        return render(request, 'WebApp/add_picture.html', context)
+
+
+@login_required
+def show_pictures(request):
+    print("in the function of show_pictures.")
+
+    context = {}
+    context['user'] = request.user
+
+    pictures = Picture.objects.all()
+    context['pictures'] = pictures
+
+    return render(request, 'WebApp/show_pictures.html', context)
+
+@login_required
+def picture_detail(request, picture_id):
+    print("in the picture_detail function.")
+
+    context = {}
+    context['user'] = request.user
+
+    print(request)
+    print(picture_id)
+
+    picture = Picture.objects.get(id=picture_id)
+    context['picture'] = picture
+
+    return render(request, 'WebApp/picture_detail.html', context)
+
+
+@login_required
+def edit_picture(request, picture_id):
+    print("in the edit_picture function.")
+
+    print(request)
+    print(picture_id)
+
+    context = {}
+    context['user'] = request.user
+
+    errors = []
+    context['errors'] = errors
+
+    if request.method == "GET":
+        print("in the GET method of edit_picture.")
+
+        picture = Picture.objects.get(id=picture_id)
+        context['picture'] = picture
+
+        print("%" * 30)
+        print(picture.picture_name)
+        print(picture.picture_image)
+        print("%" * 30)
+
+        return render(request, 'WebApp/edit_picture.html', context)
+
+    else:
+        print("in the POST method of edit_picture.")
+
+        picture = Picture.objects.get(id=picture_id)
+        context['picture'] = picture
+
+        picture_name = request.POST['picture_name']
+        picture_image = request.FILES['picture_image']
+
+        print(picture_name)
+        print(picture_image)
+
+        if not (picture_name and picture_image):
+            print("There are some fields which are None.")
+            errors.append("There are some fields which are None.")
+
+            context['picture_name'] = picture_name
+            context['picture_image'] = picture_image
+
+            return render(request, 'WebApp/edit_picture.html', context)
+
+        if (picture.picture_name != picture_name and len(Picture.objects.filter(picture_name=picture_name)) > 0):
+            print("The picture_name already exist.")
+            errors.append("The picture_name already exist.")
+
+            context['picture_name'] = picture_name
+            context['picture_image'] = picture_image
+
+            return render(request, 'WebApp/edit_picture.html', context)
+
+        picture.picture_name = picture_name
+        picture.picture_image = picture_image
+        picture.save()
+
+        print("Already edit the Picture object.")
+
+        return HttpResponseRedirect(reverse('show_pictures'))
+
+@login_required
+def delete_picture(request, picture_id):
+    print("in the delete_picture function.")
+
+    print(request)
+    print(picture_id)
+
+    context = {}
+    context['user'] = request.user
+
+    picture = Picture.objects.get(id=picture_id)
+    picture.delete()
+    print("Already delete the Picture object.")
+
+    return HttpResponseRedirect(reverse("show_pictures"))
+
+from mimetypes import guess_type
+
+def get_picture_image(request, picture_id):
+    print("in the get_picture_image function.")
+
+    print(request)
+    print(picture_id)
+
+    picture = Picture.objects.get(id=picture_id)
+
+    print(picture.picture_image)
+    print(picture.picture_image.name)
+
+    content_type = guess_type(picture.picture_image.name)
+
+    return HttpResponse(picture.picture_image, content_type=content_type)
